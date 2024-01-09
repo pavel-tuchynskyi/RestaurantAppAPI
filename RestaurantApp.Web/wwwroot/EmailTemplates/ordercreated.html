@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Order placed</title>
+</head>
+<body style="background-color: #18e3d1; display: flex; flex-direction: column; align-items: center;">
+    <script>
+        function copyOrderId() {{
+            var copyText = document.getElementById("order_id");
+
+            navigator.clipboard.writeText(copyText.textContent);
+        }}
+    </script>
+    <div style="padding: 10px 30px; background-color: #d2ecff; border: 1px solid black; border-radius: 10px; font-family: Arial;">
+        <div>
+            <h1 style="color: #18199d;">RestaurantApp</h1>
+            <h2 style="color: #171858;">Hello {0}! Thanks for the order!</h2>
+            <p>
+                We have received your order and already preparing it.<br />
+                When your order is ready we will deliver it to your address:<br />
+                <span style="color: #18199d;">{1}</span>
+            </p>
+            <div style="padding: 1px 15px; width: 300px; background-color: #1dfcff; font-size: 16px; color: #171858; ">
+                <p style="font-size: 18px; font-weight: bold;">Your order id:</p>
+                <p id="order_id" onclick="copyOrderId()" style="padding: 5px; background-color: #bae8f8; cursor: pointer; color: #18199d;">{2}</p>
+                <p style="font-size: 12px;">Click to copy</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>
+                If you have any questions feel free to call us.<br/>
+                Phone: +133713371377 (Viber, Telegram)
+            </p>
+        </div>
+    </div>
+</body>
+</html>

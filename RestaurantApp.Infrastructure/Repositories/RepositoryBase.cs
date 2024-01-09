@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RestaurantApp.Application.Common.Exceptions;
 using RestaurantApp.Application.Common.Models;
 using RestaurantApp.Application.Common.Specifications;
@@ -14,12 +15,14 @@ namespace RestaurantApp.Infrastructure.Repositories
     {
         protected readonly AppDbContext _dbContext;
         protected readonly IMapper _mapper;
+        protected readonly ILogger<T> _logger;
         protected readonly DbSet<T> _entities;
 
-        public RepositoryBase(AppDbContext dbContext, IMapper mapper)
+        public RepositoryBase(AppDbContext dbContext, IMapper mapper, ILogger<T> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
             _entities = dbContext.Set<T>();
         }
 
@@ -38,6 +41,7 @@ namespace RestaurantApp.Infrastructure.Repositories
 
             if (item is null)
             {
+                _logger.LogError($"Can't find item with id {id}");
                 throw new NotFoundException("Can't find this item");
             }
 
@@ -107,6 +111,7 @@ namespace RestaurantApp.Infrastructure.Repositories
 
             if (result == 0)
             {
+                _logger.LogError($"Can't save this entity, or modified rows didn't change.");
                 throw new ServerErrorException("An error occurred while trying to save");
             }
         }

@@ -23,15 +23,14 @@ namespace RestaurantApp.Application.JapaneesFoodMenu.Commands.CreateJapaneesFood
 
         public async Task<Unit> Create(string name, byte[] imageBlob, string imageType, decimal price, List<Guid> components)
         {
-            var rolls = new Rolls(
-                ItemName.Create(name),
-                Image.Create(imageBlob, imageType),
-                Price.Create(price));
-
             var ingridients = await _ingridientsRepository.GetAllAsync(
                 new IdInRangeSpecification<JapaneesFoodIngridient>(components));
 
-            rolls.AddRange(ingridients);
+            var rolls = new Rolls(
+                ItemName.Create(name),
+                Image.Create(imageBlob, imageType),
+                Price.Create(price),
+                ingridients);
 
             await _foodRepository.CreateAsync(rolls);
 

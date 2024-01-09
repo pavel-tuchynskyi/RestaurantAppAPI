@@ -10,5 +10,6 @@ namespace RestaurantApp.Infrastructure.Common.Interfaces.Authentication
         Task<User> FindAsync(Expression<Func<User, bool>> condition, bool tracking = false);
         Task<bool> UserExistedAsync(string email);
         Task<bool> IsUserInRoleAsync(Guid userId, RoleName role);
+        Task<bool> ConfirmEmail(User user, string token);
     }
 }

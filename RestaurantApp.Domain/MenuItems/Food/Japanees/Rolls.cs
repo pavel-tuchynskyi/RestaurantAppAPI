@@ -14,9 +14,10 @@ namespace RestaurantApp.Domain.MenuItems.Food.Japanees
         public IReadOnlyList<JapaneesFoodIngridient> Ingridients => _ingridients.AsReadOnly();
 
         protected Rolls() { }
-        public Rolls(ItemName name, Image image, Price price) 
+        public Rolls(ItemName name, Image image, Price price, List<JapaneesFoodIngridient> ingridients) 
             : base(name, image, price)
         {
+            AddRange(ingridients);
         }
 
         public void Add(JapaneesFoodIngridient ingridient)

@@ -23,15 +23,14 @@ namespace RestaurantApp.Application.ItalianFoodMenu.Commands.CreateItalianFood.C
 
         public async Task<Unit> Create(string name, byte[] imageBlob, string imageType, decimal price, List<Guid> components)
         {
-            var pizza = new Pizza(
-                ItemName.Create(name),
-                Image.Create(imageBlob, imageType),
-                Price.Create(price));
-
             var ingridients = await _ingridientsRepository.GetAllAsync(
                 new IdInRangeSpecification<ItalianFoodIngridient>(components));
 
-            pizza.AddRange(ingridients);
+            var pizza = new Pizza(
+                ItemName.Create(name),
+                Image.Create(imageBlob, imageType),
+                Price.Create(price),
+                ingridients);
 
             await _foodRepository.CreateAsync(pizza);
 

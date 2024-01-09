@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantApp.Application.Common.Interfaces;
 using RestaurantApp.Application.Common.Interfaces.Account;
 using RestaurantApp.Application.Common.Interfaces.MenuItems;
 using RestaurantApp.Application.Common.Interfaces.Orders;
@@ -28,10 +29,12 @@ namespace RestaurantApp.Infrastructure.Configuration
 
             services.RegisterOption(configuration, typeof(JwtSettings));
             services.RegisterOption(configuration, typeof(PasswordHasherSettings));
+            services.RegisterOption(configuration, typeof(SmtpConfiguration));
+            services.RegisterOption(configuration, typeof(EmailTemplates));
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddSingleton<PasswordHasher>();
-            services.AddSingleton<JwtTokenGenerator>();
+            services.AddSingleton<TokenGenerator>();
             services.AddScoped<IRoleManager, RoleManager>();
 
             services.AddScoped<IAccountService, AccountService>();
@@ -39,6 +42,9 @@ namespace RestaurantApp.Infrastructure.Configuration
             services.AddScoped(typeof(IMenuRepository<>), typeof(DrinkRepository<>));
             services.AddScoped(typeof(IIngridientsRepository<>), typeof(IngridientsRepository<>));
             services.AddScoped<IOrderRepository, OrdersRepository>();
+
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ITemplateService, EmailTemplateService>();
 
             return services;
         }

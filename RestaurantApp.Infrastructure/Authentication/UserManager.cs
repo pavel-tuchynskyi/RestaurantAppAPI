@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RestaurantApp.Application.Common.Exceptions;
 using RestaurantApp.Domain.Users;
 using RestaurantApp.Domain.Users.ValueObjects;
@@ -12,10 +13,12 @@ namespace RestaurantApp.Infrastructure.Authentication
     public class UserManager : IUserManager
     {
         private readonly AppDbContext _dbContext;
+        private readonly ILogger<UserManager> _logger;
 
-        public UserManager(AppDbContext dbContext)
+        public UserManager(AppDbContext dbContext, ILogger<UserManager> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task CreateAsync(User user)
@@ -26,7 +29,8 @@ namespace RestaurantApp.Infrastructure.Authentication
 
             if (result == 0)
             {
-                throw new ServerErrorException("Can't save this user");
+                _logger.LogError($"Can't save this user");
+                throw new ServerErrorException("An error occurred while trying to save");
             }
         }
 
@@ -35,11 +39,6 @@ namespace RestaurantApp.Infrastructure.Authentication
             var user = await _dbContext.Users
                 .Tracking(tracking)
                 .FirstOrDefaultAsync(condition);
-
-            if (user is null)
-            {
-                throw new NotFoundException("Can't find this user");
-            }
 
             return user;
         }
@@ -52,6 +51,21 @@ namespace RestaurantApp.Infrastructure.Authentication
         public async Task<bool> IsUserInRoleAsync(Guid userId, RoleName role)
         {
             return await _dbContext.Users.AnyAsync(x => x.Id == userId && x.Role.Name.Value == role.Value);
+        }
+
+        public async Task<bool> ConfirmEmail(User user, string token)
+        {
+            user.ConfirmEmail(token);
+
+            var result = await _dbContext.SaveChangesAsync();
+
+            if(result == 0)
+            {
+                _logger.LogError("Error occured while trying to save changes to user {0}", user.Id);
+                return false;
+            }
+
+            return true;
         }
     }
 }

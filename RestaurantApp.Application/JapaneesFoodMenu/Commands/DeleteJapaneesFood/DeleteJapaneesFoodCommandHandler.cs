@@ -14,7 +14,7 @@ namespace RestaurantApp.Application.JapaneesFoodMenu.Commands.DeleteJapaneesFood
         }
         public async Task<Unit> Handle(DeleteJapaneesFoodCommand request, CancellationToken cancellationToken)
         {
-            await _foodRepository.Delete(request.id);
+            await _foodRepository.Delete(request.Id);
 
             return Unit.Value;
         }

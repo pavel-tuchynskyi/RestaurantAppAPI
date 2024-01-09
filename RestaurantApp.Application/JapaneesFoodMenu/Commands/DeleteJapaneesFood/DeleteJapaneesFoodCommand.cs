@@ -2,5 +2,5 @@
 
 namespace RestaurantApp.Application.JapaneesFoodMenu.Commands.DeleteJapaneesFood
 {
-    public record DeleteJapaneesFoodCommand(Guid id) : IRequest<Unit>;
+    public record DeleteJapaneesFoodCommand(Guid Id) : IRequest<Unit>;
 }

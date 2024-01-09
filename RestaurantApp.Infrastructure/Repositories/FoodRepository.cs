@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RestaurantApp.Application.Common.Exceptions;
 using RestaurantApp.Application.Common.Interfaces.MenuItems;
 using RestaurantApp.Application.Common.Models;
@@ -14,7 +15,7 @@ namespace RestaurantApp.Infrastructure.Repositories
     public class FoodRepository<T> : RepositoryBase<T>, IMenuRepository<T>
         where T : MenuItem
     {
-        public FoodRepository(AppDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        public FoodRepository(AppDbContext dbContext, IMapper mapper, ILogger<T> logger) : base(dbContext, mapper, logger)
         {
         }
 
@@ -27,6 +28,7 @@ namespace RestaurantApp.Infrastructure.Repositories
 
             if (item is null)
             {
+                _logger.LogInformation($"Can't find menu item with if {id}");
                 throw new NotFoundException("Can't find this menu item");
             }
 

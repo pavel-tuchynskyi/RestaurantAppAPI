@@ -1,16 +1,18 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RestaurantApp.Infrastructure.Configuration;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace RestaurantApp.Infrastructure.Authentication
 {
-    public class JwtTokenGenerator
+    public class TokenGenerator
     {
         private readonly JwtSettings _jwtSettings;
-        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettingsOptions)
+        public TokenGenerator(IOptions<JwtSettings> jwtSettingsOptions)
         {
             _jwtSettings = jwtSettingsOptions.Value;
         }
@@ -56,6 +58,18 @@ namespace RestaurantApp.Infrastructure.Authentication
                 signingCredentials: creds);
 
             return securityToken;
+        }
+
+        public string GenerateEmailConfirmationToken()
+        {
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] tokenData = new byte[32];
+
+                rng.GetBytes(tokenData);
+
+                return Convert.ToBase64String(tokenData);
+            }
         }
     }
 }

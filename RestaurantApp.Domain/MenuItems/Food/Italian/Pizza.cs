@@ -13,8 +13,9 @@ namespace RestaurantApp.Domain.MenuItems.Food.Italian
         public IReadOnlyList<ItalianFoodIngridient> Ingridients => _ingridients.AsReadOnly();
 
         protected Pizza() { }
-        public Pizza(ItemName name, Image image, Price price) : base(name, image, price)
+        public Pizza(ItemName name, Image image, Price price, List<ItalianFoodIngridient> ingridients) : base(name, image, price)
         {
+            AddRange(ingridients);
         }
 
         public void Add(ItalianFoodIngridient ingridient)

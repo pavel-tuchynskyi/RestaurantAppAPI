@@ -3,8 +3,15 @@ using RestaurantApp.Infrastructure.Configuration;
 using RestaurantApp.Infrastructure.Data.Seeder;
 using RestaurantApp.Web.Configuration;
 using RestaurantApp.Web.Middlewares;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((ctx, lc) =>
+{
+    lc.MinimumLevel.Information()
+        .WriteTo.Console();
+});
 
 var configuration = builder.Configuration;
 
@@ -25,6 +32,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AppCors");
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 

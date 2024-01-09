@@ -1,6 +1,7 @@
 ﻿using RestaurantApp.Domain.Common;
 using RestaurantApp.Domain.MenuItems;
 using RestaurantApp.Domain.MenuItems.ValueObjects;
+using RestaurantApp.Domain.Orders.Events;
 using RestaurantApp.Domain.Orders.ValueObjects;
 using RestaurantApp.Domain.Users;
 
@@ -26,6 +27,8 @@ namespace RestaurantApp.Domain.Orders
             Status = OrderStatus.Pending;
             CreatedAt = DateTime.UtcNow;
             AddItems(items);
+
+            AddDomainEvent(new OrderCreated(this));
         }
 
         public void UpdateInformation(OrderStatus status, OrderAddress address)

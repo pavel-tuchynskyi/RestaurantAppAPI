@@ -12,7 +12,7 @@ namespace RestaurantApp.Domain.MenuItems.Food.Japanees
         public IReadOnlyList<JapaneesFood> Ingridients => _ingridients.AsReadOnly();
 
         protected Set() { }
-        public Set(ItemName name, Image image, Price price) : base(name, image, price)
+        public Set(ItemName name, Image image, Price price, List<JapaneesFood> japaneesFoods) : base(name, image, price)
         {          
         }
 

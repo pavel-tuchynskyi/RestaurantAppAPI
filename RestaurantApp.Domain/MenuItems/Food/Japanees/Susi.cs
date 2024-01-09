@@ -13,9 +13,10 @@ namespace RestaurantApp.Domain.MenuItems.Food.Japanees
         public IReadOnlyList<JapaneesFoodIngridient> Ingridients => _ingridients.AsReadOnly();
 
         protected Susi() { }
-        public Susi(ItemName name, Image image, Price price)
+        public Susi(ItemName name, Image image, Price price, List<JapaneesFoodIngridient> ingridients)
             : base(name, image, price)
         {
+            AddRange(ingridients);
         }
 
         public void Add(JapaneesFoodIngridient ingridient)

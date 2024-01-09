@@ -6,6 +6,7 @@ namespace RestaurantApp.Domain.MenuItems.ValueObjects
 {
     public class Image : ValueObject
     {
+        public static readonly int IMAGE_MAX_LENGHT = 1000000;
         private static Dictionary<string, ImageTypes> _allowedTypes = new()
         {
             { ".jpg", ImageTypes.jpg },

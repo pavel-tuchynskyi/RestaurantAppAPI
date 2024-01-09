@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RestaurantApp.Application.Common.Exceptions;
 using RestaurantApp.Domain.Users.Entities;
 using RestaurantApp.Domain.Users.ValueObjects;
@@ -10,10 +11,12 @@ namespace RestaurantApp.Infrastructure.Authentication
     public class RoleManager : IRoleManager
     {
         private readonly AppDbContext _dbContext;
+        private readonly ILogger<RoleManager> _logger;
 
-        public RoleManager(AppDbContext dbContext)
+        public RoleManager(AppDbContext dbContext, ILogger<RoleManager> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<Role> GetByNameAsync(RoleName name)
@@ -22,6 +25,7 @@ namespace RestaurantApp.Infrastructure.Authentication
 
             if (role is null)
             {
+                _logger.LogError($"Can't find role: {name.Value}");
                 throw new NotFoundException("Can't find this role");
             }
 

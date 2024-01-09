@@ -26,23 +26,21 @@ namespace RestaurantApp.Infrastructure.Data.Seeder
 
             var user = new User(
                 Name.Create("User", "User"),
-                UserEmail.Create("user@mail.com"),
+                UserEmail.Create("user@mail.com", "user@mail.com"),
                 Phone.Create("+380000000000"),
-                Password.Create(userHash, userSalt)
+                Password.Create(userHash, userSalt),
+                userRole
             );
-
-            user.AddToRole(userRole);
 
             var adminHash = passwordHasher.HashPasword("123abc123", out var adminSalt);
 
             var admin = new User(
                 Name.Create("Admin", "Admin"),
-                UserEmail.Create("admin@mail.com"),
+                UserEmail.Create("admin@mail.com", "admin@mail.com"),
                 Phone.Create("+380000000000"),
-                Password.Create(adminHash, adminSalt)
+                Password.Create(adminHash, adminSalt),
+                adminRole
             );
-
-            admin.AddToRole(adminRole);
 
             Console.WriteLine("Insert operation started...");
 

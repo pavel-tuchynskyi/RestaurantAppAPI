@@ -2,7 +2,7 @@
 
 namespace RestaurantApp.Application.Account.Commands.Register
 {
-    public class RegisterCommand : IRequest
+    public class RegisterCommand : IRequest<Unit>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

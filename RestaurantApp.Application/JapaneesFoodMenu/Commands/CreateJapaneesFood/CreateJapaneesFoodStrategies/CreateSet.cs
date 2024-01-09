@@ -23,18 +23,17 @@ namespace RestaurantApp.Application.JapaneesFoodMenu.Commands.CreateJapaneesFood
 
         public async Task<Unit> Create(string name, byte[] imageBlob, string imageType, decimal price, List<Guid> components)
         {
-            var set = new Set(
-                ItemName.Create(name),
-                Image.Create(imageBlob, imageType),
-                Price.Create(price));
-
             var setComponents = await _foodRepository.GetAllAsync(
                 new IdInRangeSpecification<JapaneesFood>(components)
                 .And(new IsTypeOfSpecification<JapaneesFood, Susi>())
                 .Or(new IsTypeOfSpecification<JapaneesFood, Rolls>()),
                 tracking: true);
 
-            set.AddRange(setComponents.Items.ToList());
+            var set = new Set(
+                ItemName.Create(name),
+                Image.Create(imageBlob, imageType),
+                Price.Create(price),
+                setComponents.Items.ToList());
 
             await _foodRepository.CreateAsync(set);
 

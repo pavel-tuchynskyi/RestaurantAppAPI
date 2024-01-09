@@ -1,6 +1,8 @@
 ﻿using RestaurantApp.Domain.Common;
 using RestaurantApp.Domain.Users.Entities;
+using RestaurantApp.Domain.Users.Events;
 using RestaurantApp.Domain.Users.ValueObjects;
+using RestaurantApp.Domain.Utils;
 
 namespace RestaurantApp.Domain.Users
 {
@@ -13,12 +15,15 @@ namespace RestaurantApp.Domain.Users
         public Role Role { get; private set; }
 
         protected User() { }
-        public User(Name name, UserEmail email, Phone phoneNumber, Password password) : this()
+        public User(Name name, UserEmail email, Phone phoneNumber, Password password, Role role) : this()
         {
             Name = name;
             Email = email;
             PhoneNumber = phoneNumber;
             Password = password;
+            Role = role;
+
+            AddDomainEvent(new UserCreated(this));
         }
 
         public void AddToRole(Role role)
@@ -29,22 +34,9 @@ namespace RestaurantApp.Domain.Users
             Role = role;
         }
 
-        public void ChangePassword(Password password)
+        public void ConfirmEmail(string token)
         {
-            if(Password != password) 
-                return;
-
-            Password = password;
-        }
-
-        public void ChangeName(string firstName, string lastName)
-        {
-            Name = Name.Create(firstName, lastName);
-        }
-
-        public void ChangeEmail(string email)
-        {
-            Email = UserEmail.Create(email);
+            Email = Email.Confirm(token);
         }
     }
 }

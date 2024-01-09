@@ -1,8 +1,13 @@
-﻿namespace RestaurantApp.Domain.Common
+﻿using RestaurantApp.Domain.Common.Interfaces;
+
+namespace RestaurantApp.Domain.Common
 {
     public abstract class Entity
     {
         public Guid Id { get; protected set; }
+
+        private List<IDomainEvent> _domainEvents = new();
+        public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
         public override bool Equals(object? obj)
         {
@@ -42,6 +47,16 @@
         public override int GetHashCode()
         {
             return (GetType().ToString() + Id.ToString()).GetHashCode();
+        }
+
+        public void AddDomainEvent(IDomainEvent domainEvent)
+        {
+            _domainEvents.Add(domainEvent);
+        }
+
+        public void ClearDomainEvents()
+        {
+            _domainEvents.Clear();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RestaurantApp.Domain.Users;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantApp.Infrastructure.Data.EntityConfigurations
 {
@@ -34,6 +33,12 @@ namespace RestaurantApp.Infrastructure.Data.EntityConfigurations
                 p.Property(pp => pp.NormalizedEmail)
                 .HasColumnName("NormalizedEmail")
                 .HasMaxLength(50);
+
+                p.Property(pp => pp.IsEmailConfirmed)
+                .HasColumnName("EmailConfirmed");
+
+                p.Property(pp => pp.EmailConfirmationToken)
+                .HasColumnName("EmailConfirmationToken");
             });
 
             builder.OwnsOne(p => p.PhoneNumber, p =>

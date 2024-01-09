@@ -529,6 +529,15 @@ namespace RestaurantApp.Infrastructure.Data.Migrations
                                 .HasColumnType("nvarchar(50)")
                                 .HasColumnName("Email");
 
+                            b1.Property<string>("EmailConfirmationToken")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("EmailConfirmationToken");
+
+                            b1.Property<bool>("IsEmailConfirmed")
+                                .HasColumnType("bit")
+                                .HasColumnName("EmailConfirmed");
+
                             b1.Property<string>("NormalizedEmail")
                                 .IsRequired()
                                 .HasMaxLength(50)

@@ -12,5 +12,6 @@ namespace RestaurantApp.Application.Common.Interfaces.Account
         Task<User> GetUserAsync(Specification<User> filter);
         Task<T> GetUserAsync<T>(Specification<User> filter);
         Task<bool> IsUserInRoleAsync(Guid userId, RoleName roleName);
+        Task ConfirmUserEmailAsync(Guid userId, string token);
     }
 }

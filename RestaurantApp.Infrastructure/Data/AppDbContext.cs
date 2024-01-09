@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using RestaurantApp.Domain.Common;
+using RestaurantApp.Domain.Common.Interfaces;
 using RestaurantApp.Domain.MenuItems;
 using RestaurantApp.Domain.MenuItems.Drink;
 using RestaurantApp.Domain.MenuItems.Entities;
@@ -12,6 +15,8 @@ namespace RestaurantApp.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {
+        private readonly IPublisher _publisher;
+
         public DbSet<User> Users { get; set; }
         
         public DbSet<Role> Roles { get; set; }
@@ -37,16 +42,44 @@ namespace RestaurantApp.Infrastructure.Data
 
         public DbSet<Order> Orders { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IPublisher publisher) : base(options)
         {
-            
+            _publisher = publisher;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+            modelBuilder.Ignore<List<IDomainEvent>>();
+
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entities = ChangeTracker.Entries<Entity>()
+                .Where(x => x.Entity.DomainEvents.Any())
+                .Select(x => x.Entity)
+                .ToList();
+
+            var domainEvents = entities.SelectMany(x => x.DomainEvents).ToList();
+
+            entities.ForEach(x => x.ClearDomainEvents());
+
+            var saveResult = await base.SaveChangesAsync(cancellationToken);
+
+            if(saveResult == 0)
+            {
+                return saveResult;
+            }
+
+            foreach(var domainEvent in domainEvents)
+            {
+                await _publisher.Publish(domainEvent);
+            }
+
+            return saveResult;
         }
     }
 }
