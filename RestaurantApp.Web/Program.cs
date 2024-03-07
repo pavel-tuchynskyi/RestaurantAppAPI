@@ -31,7 +31,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AppCors");
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseStaticFiles();
 

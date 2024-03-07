@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using RestaurantApp.Application.Common.DTOs.Account;
 using RestaurantApp.Application.Common.Exceptions;
 using RestaurantApp.Application.Common.Interfaces.Account;
+using RestaurantApp.Application.Common.Models;
 using RestaurantApp.Application.Common.Specifications;
 using RestaurantApp.Domain.Users;
 using RestaurantApp.Domain.Users.Events;
@@ -61,9 +62,7 @@ namespace RestaurantApp.Infrastructure.Services
             await _userManager.CreateAsync(user);
         }
 
-
-
-        public async Task<string> LoginAsync(UserLoginDto userDto)
+        public async Task<AccessToken> LoginAsync(UserLoginDto userDto)
         {
             var user = await _userManager.FindAsync(x => x.Email.NormalizedEmail == userDto.Email.ToUpper());
 

@@ -16,6 +16,7 @@ using System.Diagnostics;
 namespace RestaurantApp.Web.Controllers
 {
     [Authorize]
+    [Route("api/Menu/Italian/[action]")]
     public class ItalianFoodController : BaseController<ItalianFoodController>
     {
         [HttpPost("{type}")]

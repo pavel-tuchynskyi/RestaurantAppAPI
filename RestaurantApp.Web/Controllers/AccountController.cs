@@ -8,6 +8,7 @@ using RestaurantApp.Web.Contracts.Account;
 
 namespace RestaurantApp.Web.Controllers
 {
+    [Route("api/[controller]/[action]")]
     public class AccountController : BaseController<AccountController>
     {
         [HttpPost]
@@ -21,13 +22,13 @@ namespace RestaurantApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<RequestResponse<string>> Login(LoginQuery query)
+        public async Task<RequestResponse<AccessToken>> Login(LoginQuery query)
         {
             _logger.LogInformation($"Login user {query.Email} to account");
             var result = await Mediator.Send(query);
 
             _logger.LogInformation($"User {query.Email} successfully logs into account");
-            return new RequestResponse<string>(200, result);
+            return new RequestResponse<AccessToken>(200, result);
         }
 
         [HttpGet]

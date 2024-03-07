@@ -6,17 +6,26 @@ namespace RestaurantApp.Application.Common.Builders
     {
         private UriBuilder _uriBuilder;
 
-        public UriPathBuilder()
+        public UriPathBuilder(string scheme, string host, int port)
         {
             _uriBuilder = new UriBuilder();
-            _uriBuilder.Scheme = "https";
-            _uriBuilder.Host = "localhost";
-            _uriBuilder.Port = 7296;
+            _uriBuilder.Scheme = scheme;
+            _uriBuilder.Host = host;
+            _uriBuilder.Port = port;
         }
 
-        public UriPathBuilder SetPath(string controller, string action) 
+        public UriPathBuilder(string url)
         {
-            _uriBuilder.Path = Path.Combine("api", controller, action);
+            _uriBuilder = new UriBuilder(url);
+        }
+
+        public UriPathBuilder SetPath(params string[] args)
+        {
+            for(int i = 0; i < args.Length; i++)
+            {
+                _uriBuilder.Path = Path.Combine(_uriBuilder.Path, args[i]);
+            }
+
             return this;
         }
 

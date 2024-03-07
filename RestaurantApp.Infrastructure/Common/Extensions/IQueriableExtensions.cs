@@ -5,6 +5,7 @@ using RestaurantApp.Application.Common.Models;
 using RestaurantApp.Application.Common.Specifications;
 using System.Linq.Expressions;
 using System.Reflection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RestaurantApp.Infrastructure.Common.Extensions
 {
@@ -88,6 +89,20 @@ namespace RestaurantApp.Infrastructure.Common.Extensions
             }
 
             return queriable.Where(filter.ToExpression());
+        }
+
+        public static IQueryable<T> IncludeOnCondition<T>(this IQueryable<T> querieble, string navigationProperty, Expression<Func<bool>> condition)
+            where T : class
+        {
+            if (string.IsNullOrWhiteSpace(navigationProperty) || condition == null)
+                return querieble;
+
+            if (condition.Compile().Invoke())
+            {
+                querieble = querieble.Include(navigationProperty);
+            }
+
+            return querieble;
         }
     }
 }

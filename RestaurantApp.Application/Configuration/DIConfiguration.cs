@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using RestaurantApp.Application.Account.Events;
 using RestaurantApp.Application.Common.Behaviors;
 using RestaurantApp.Application.Common.DTOs.Menu;
 using RestaurantApp.Application.Common.Helpers;
-using RestaurantApp.Application.Common.Interfaces;
 using RestaurantApp.Application.Common.Models;
 using RestaurantApp.Application.DrinkMenu.Commands.CreateDrinkItem;
+using RestaurantApp.Application.DrinkMenu.Queries.GetDrinkItem;
 using RestaurantApp.Application.DrinkMenu.Queries.GetDrinkItems;
 using RestaurantApp.Application.Ingridients.Command.CreateIngridient;
 using RestaurantApp.Application.ItalianFoodMenu.Commands.CreateItalianFood;
@@ -20,7 +19,6 @@ using RestaurantApp.Domain.MenuItems.Drink;
 using RestaurantApp.Domain.MenuItems.Entities;
 using RestaurantApp.Domain.MenuItems.Food.Italian;
 using RestaurantApp.Domain.MenuItems.Food.Japanees;
-using RestaurantApp.Domain.Users.Events;
 using System.Reflection;
 
 namespace RestaurantApp.Application.Configuration
@@ -84,15 +82,22 @@ namespace RestaurantApp.Application.Configuration
                 CreateDrinkItemCommandHandler<Beer>>();
             services.AddTransient<IRequestHandler<CreateDrinkItemCommand<Wine>, Unit>,
                 CreateDrinkItemCommandHandler<Wine>>();
-            services.AddTransient<IRequestHandler<CreateDrinkItemCommand<NonAlcoholDrink>, Unit>,
-                CreateDrinkItemCommandHandler<NonAlcoholDrink>>();
+            services.AddTransient<IRequestHandler<CreateDrinkItemCommand<NonAlcohol>, Unit>,
+                CreateDrinkItemCommandHandler<NonAlcohol>>();
 
             services.AddTransient<IRequestHandler<GetDrinkItemsQuery<Wine>, PagedList<DrinkItemDto>>,
                 GetDrinkItemsQueryHandler<Wine>>();
             services.AddTransient<IRequestHandler<GetDrinkItemsQuery<Beer>, PagedList<DrinkItemDto>>,
                 GetDrinkItemsQueryHandler<Beer>>();
-            services.AddTransient<IRequestHandler<GetDrinkItemsQuery<NonAlcoholDrink>, PagedList<DrinkItemDto>>,
-                GetDrinkItemsQueryHandler<NonAlcoholDrink>>();
+            services.AddTransient<IRequestHandler<GetDrinkItemsQuery<NonAlcohol>, PagedList<DrinkItemDto>>,
+                GetDrinkItemsQueryHandler<NonAlcohol>>();
+
+            services.AddTransient<IRequestHandler<GetDrinkItemQuery<Wine>, DrinkItemDto>,
+                GetDrinkItemQueryHandler<Wine>>();
+            services.AddTransient<IRequestHandler<GetDrinkItemQuery<Beer>, DrinkItemDto>,
+                GetDrinkItemQueryHandler<Beer>>();
+            services.AddTransient<IRequestHandler<GetDrinkItemQuery<NonAlcohol>, DrinkItemDto>,
+                GetDrinkItemQueryHandler<NonAlcohol>>();
 
             return services;
         }

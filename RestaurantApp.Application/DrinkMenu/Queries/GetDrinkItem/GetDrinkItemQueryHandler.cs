@@ -5,15 +5,16 @@ using RestaurantApp.Domain.MenuItems.Drink;
 
 namespace RestaurantApp.Application.DrinkMenu.Queries.GetDrinkItem
 {
-    public class GetDrinkItemQueryHandler : IRequestHandler<GetDrinkItemQuery, DrinkItemDto>
+    public class GetDrinkItemQueryHandler<T> : IRequestHandler<GetDrinkItemQuery<T>, DrinkItemDto>
+        where T : DrinkMenuItem
     {
-        private readonly IMenuRepository<DrinkMenuItem> _drinkRepository;
+        private readonly IMenuRepository<T> _drinkRepository;
 
-        public GetDrinkItemQueryHandler(IMenuRepository<DrinkMenuItem> drinkRepository)
+        public GetDrinkItemQueryHandler(IMenuRepository<T> drinkRepository)
         {
             _drinkRepository = drinkRepository;
         }
-        public async Task<DrinkItemDto> Handle(GetDrinkItemQuery request, CancellationToken cancellationToken)
+        public async Task<DrinkItemDto> Handle(GetDrinkItemQuery<T> request, CancellationToken cancellationToken)
         {
             var item = await _drinkRepository.GetByIdAsync<DrinkItemDto>(request.Id);
 

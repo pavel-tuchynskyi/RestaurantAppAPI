@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantApp.Application.Common.Interfaces;
 using RestaurantApp.Application.Common.Interfaces.Account;
@@ -31,6 +32,10 @@ namespace RestaurantApp.Infrastructure.Configuration
             services.RegisterOption(configuration, typeof(PasswordHasherSettings));
             services.RegisterOption(configuration, typeof(SmtpConfiguration));
             services.RegisterOption(configuration, typeof(EmailTemplates));
+            services.RegisterOption(configuration, typeof(ClientUrl));
+
+            services.AddSingleton<IClientUrlSettings>(sp =>
+                sp.GetRequiredService<IOptions<ClientUrl>>().Value);
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddSingleton<PasswordHasher>();
@@ -38,8 +43,7 @@ namespace RestaurantApp.Infrastructure.Configuration
             services.AddScoped<IRoleManager, RoleManager>();
 
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped(typeof(IMenuRepository<>), typeof(FoodRepository<>));
-            services.AddScoped(typeof(IMenuRepository<>), typeof(DrinkRepository<>));
+            services.AddScoped(typeof(IMenuRepository<>), typeof(MenuRepository<>));
             services.AddScoped(typeof(IIngridientsRepository<>), typeof(IngridientsRepository<>));
             services.AddScoped<IOrderRepository, OrdersRepository>();
 

@@ -14,6 +14,7 @@ using RestaurantApp.Web.Contracts.Ingridients;
 namespace RestaurantApp.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Route("api/[controller]/[action]")]
     public class IngridientsController : BaseController<IngridientsController>
     {
         [HttpPost("{type}")]

@@ -15,7 +15,8 @@ using RestaurantApp.Web.Contracts.Menu;
 namespace RestaurantApp.Web.Controllers
 {
     [Authorize]
-    public class JapaneesFoodController : BaseController<JapaneesFoodController>
+    [Route("api/Menu/Japanes/[action]")]
+    public class JapanesFoodController : BaseController<JapanesFoodController>
     {
         [HttpPost("{type}")]
         [Authorize(Roles = "Admin")]

@@ -11,18 +11,23 @@ namespace RestaurantApp.Application.Account.Events
     {
         private readonly IEmailService _emailService;
         private readonly ITemplateService _templateService;
+        private readonly IClientUrlSettings _clientUrl;
 
-        public UserCreatedEventHandler(IEmailService emailService, ITemplateService templateService)
+        public UserCreatedEventHandler(IEmailService emailService, ITemplateService templateService,
+            IClientUrlSettings clientUrl)
         {
             _emailService = emailService;
             _templateService = templateService;
+            _clientUrl = clientUrl;
         }
+
         public async Task Handle(UserCreated notification, CancellationToken cancellationToken)
         {
             var template = await _templateService.GetTemplate("ConfirmEmail");
-            
-            var builder = new UriPathBuilder();
-            builder.SetPath("Account", "ConfirmEmail");
+
+            var builder = new UriPathBuilder(_clientUrl.BaseUrl);
+
+            builder.SetPath(_clientUrl.Path["ConfirmEmail"]);
 
             var token = HttpUtility.HtmlEncode(notification.User.Email.EmailConfirmationToken);
             var queryParams = new Dictionary<string, string>()

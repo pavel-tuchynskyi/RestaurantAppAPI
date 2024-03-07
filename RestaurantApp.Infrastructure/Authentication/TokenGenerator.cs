@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using RestaurantApp.Application.Common.Models;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,13 +18,13 @@ namespace RestaurantApp.Infrastructure.Authentication
             _jwtSettings = jwtSettingsOptions.Value;
         }
 
-        public string GenerateAccessToken(Guid userId, string fullName, string email, string role)
+        public AccessToken GenerateAccessToken(Guid userId, string fullName, string email, string role)
         {
             var signingCredentials = GetSignInCredentials();
             var claims = GetClaims(userId, fullName, email, role);
             var accessToken = GenerateToken(signingCredentials, claims);
 
-            return new JwtSecurityTokenHandler().WriteToken(accessToken);
+            return new AccessToken(new JwtSecurityTokenHandler().WriteToken(accessToken));
         }
 
         private SigningCredentials GetSignInCredentials()

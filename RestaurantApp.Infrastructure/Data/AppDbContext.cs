@@ -32,7 +32,7 @@ namespace RestaurantApp.Infrastructure.Data
         public DbSet<Set> Sets { get; set; }
 
         public DbSet<DrinkMenuItem> DrinkMenuItems { get; set; }
-        public DbSet<NonAlcoholDrink> NonAlcoholDrink { get; set; }
+        public DbSet<NonAlcohol> NonAlcoholDrink { get; set; }
         public DbSet<Beer> Beer { get; set; }
         public DbSet<Wine> Wine { get; set; }
 

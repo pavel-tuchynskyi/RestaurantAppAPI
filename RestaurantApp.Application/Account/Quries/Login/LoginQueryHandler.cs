@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using RestaurantApp.Application.Common.DTOs.Account;
 using RestaurantApp.Application.Common.Interfaces.Account;
+using RestaurantApp.Application.Common.Models;
 
 namespace RestaurantApp.Application.Account.Quries.Login
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, string>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, AccessToken>
     {
         private readonly IAccountService _accountService;
 
@@ -12,7 +13,7 @@ namespace RestaurantApp.Application.Account.Quries.Login
         {
             _accountService = accountService;
         }
-        public async Task<string> Handle(LoginQuery request, CancellationToken cancellationToken)
+        public async Task<AccessToken> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
             var userDto = new UserLoginDto(request.Email, request.Password);
             var token = await _accountService.LoginAsync(userDto);

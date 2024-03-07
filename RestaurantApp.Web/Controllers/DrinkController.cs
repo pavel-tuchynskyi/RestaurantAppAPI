@@ -15,6 +15,7 @@ using RestaurantApp.Web.Contracts.Menu;
 namespace RestaurantApp.Web.Controllers
 {
     [Authorize]
+    [Route("api/Menu/Drink/[action]")]
     public class DrinkController : BaseController<DrinkController>
     {
         [HttpPost("{type}")]
@@ -27,7 +28,7 @@ namespace RestaurantApp.Web.Controllers
             {
                 nameof(Wine) => new CreateDrinkItemCommand<Wine>(request.Name, request.Image, request.Price, request.Description),
                 nameof(Beer) => new CreateDrinkItemCommand<Beer>(request.Name, request.Image, request.Price, request.Description),
-                nameof(NonAlcoholDrink) => new CreateDrinkItemCommand<NonAlcoholDrink>(request.Name, request.Image, request.Price, request.Description),
+                nameof(NonAlcohol) => new CreateDrinkItemCommand<NonAlcohol>(request.Name, request.Image, request.Price, request.Description),
                 _ => throw new BadRequestException("Unknown type of drink")
             };
 
@@ -38,12 +39,18 @@ namespace RestaurantApp.Web.Controllers
             return new RequestResponse<Unit>(201, result);
         }
 
-        [HttpGet]
-        public async Task<RequestResponse<DrinkItemDto>> Get([FromQuery]Guid id)
+        [HttpGet("{type}")]
+        public async Task<RequestResponse<DrinkItemDto>> Get(string type, [FromQuery]Guid id)
         {
             _logger.LogInformation($"Requesting drink item with id {id}");
 
-            var query = new GetDrinkItemQuery(id);
+            IRequest<DrinkItemDto> query = type switch
+            {
+                nameof(Wine) => new GetDrinkItemQuery<Wine>(id),
+                nameof(Beer) => new GetDrinkItemQuery<Beer>(id),
+                nameof(NonAlcohol) => new GetDrinkItemQuery<NonAlcohol>(id),
+                _ => throw new BadRequestException("Unknown type of drink")
+            };
 
             var result = await Mediator.Send(query);
 
@@ -61,7 +68,7 @@ namespace RestaurantApp.Web.Controllers
             {
                 nameof(Wine) => new GetDrinkItemsQuery<Wine>(request.Search, request.OrderBy, request.Paging),
                 nameof(Beer) => new GetDrinkItemsQuery<Beer>(request.Search, request.OrderBy, request.Paging),
-                nameof(NonAlcoholDrink) => new GetDrinkItemsQuery<NonAlcoholDrink>(request.Search, request.OrderBy, request.Paging),
+                nameof(NonAlcohol) => new GetDrinkItemsQuery<NonAlcohol>(request.Search, request.OrderBy, request.Paging),
                 _ => throw new BadRequestException("Unknown type of drink")
             };
 

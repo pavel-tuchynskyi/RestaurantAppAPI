@@ -2,10 +2,10 @@
 
 namespace RestaurantApp.Domain.MenuItems.Drink
 {
-    public class NonAlcoholDrink : DrinkMenuItem
+    public class NonAlcohol : DrinkMenuItem
     {
-        protected NonAlcoholDrink() { }
-        public NonAlcoholDrink(ItemName name, Image image, Price price, Description description)
+        protected NonAlcohol() { }
+        public NonAlcohol(ItemName name, Image image, Price price, Description description)
             : base(name, image, price, description)
         {
         }

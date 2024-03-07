@@ -12,6 +12,7 @@ using RestaurantApp.Web.Contracts.Orders;
 namespace RestaurantApp.Web.Controllers
 {
     [Authorize]
+    [Route("api/[controller]/[action]")]
     public class OrdersController : BaseController<OrdersController>
     {
         [HttpPost]
